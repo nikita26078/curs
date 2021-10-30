@@ -2,8 +2,11 @@ import datetime
 import json
 
 import requests
+from urllib3.exceptions import InsecureRequestWarning
 
 import settings
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
 
