@@ -122,7 +122,7 @@ USE_TZ = True
 JAZZMIN_SETTINGS = {
     "topmenu_links": [
         # Url that gets reversed (Permissions can be added)
-        {"name": "Просмотр сайта",  "url": "home", "permissions": ["auth.view_user"]},
+        {"name": "Просмотр сайта",  "url": "/", "permissions": ["auth.view_user"]},
     ],
 }
 
