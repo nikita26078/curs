@@ -3,7 +3,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from utils import process_timetable, get_timetable, get_current
+from .utils import process_timetable, get_timetable, get_current
 
 
 def about(request):

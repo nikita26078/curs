@@ -4,7 +4,7 @@ import json
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
-import settings
+from django.conf import settings
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
