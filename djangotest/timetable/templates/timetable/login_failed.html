@@ -1,0 +1,6 @@
+{% extends "timetable/layout.html" %}
+{% block title %}Ошибка{% endblock %}
+{% block content %}
+<h1>{{ text }}</h1>
+<p>Попробуйте заново <a href="{% url 'login' %}">войти</a> в аккаунт</p>
+{% endblock %}

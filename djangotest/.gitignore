@@ -19,3 +19,4 @@ tests/report/
 .idea/
 app/
 venv/
+staticfiles/
