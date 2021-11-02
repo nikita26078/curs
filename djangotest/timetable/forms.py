@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, PasswordInput, Form
+from django.forms import ModelForm, CharField, PasswordInput, Form, ChoiceField
 
 
 class UserRegistrationForm(ModelForm):
@@ -21,3 +21,7 @@ class UserRegistrationForm(ModelForm):
 class LoginForm(Form):
     username = CharField(label='Имя пользователя')
     password = CharField(label='Пароль', widget=PasswordInput)
+
+
+class ParamsForm(Form):
+    group = ChoiceField(label="Группа")

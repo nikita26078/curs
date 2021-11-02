@@ -1,10 +1,9 @@
 # Create your views here.
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import render, redirect
 
-from .forms import LoginForm, UserRegistrationForm
-from .utils import process_timetable, get_timetable, get_current
+from .forms import LoginForm, UserRegistrationForm, ParamsForm
+from .utils import get_timetable, get_current, get_groups
 
 
 def about(request):
@@ -57,15 +56,30 @@ def profile(request):
         return render(request, 'timetable/profile.html', data)
 
 
-class IndexListView(TemplateView):
-    template_name = 'timetable/index.html'
+def view(request):
+    error = ''
+    form = ParamsForm(request.POST or None, initial=request.session.get('form_data'))
+    choices = request.session.get('choices')
+    if choices is None:
+        choices = get_groups()
+        request.session['choices'] = choices
+    form.fields['group'].choices = choices
 
-    def get_context_data(self, **kwargs):
-        result_holder = get_timetable()
-        days = process_timetable(result_holder)
+    if request.method == 'POST':
+        if form.is_valid():
+            request.session['form_data'] = form.cleaned_data
+            group = form.data['group']
+            request.session['group'] = group
+            dictionary = {'days': get_timetable(group), 'current': get_current(), 'form': form}
+            return redirect("/", context=dictionary)
+        else:
+            print(form.errors)
+            error = 'Ошибка валидации'
 
-        context = super(IndexListView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['days'] = days
-        context['current'] = get_current()
-        return context
+    group = request.session.get('group')
+    if group is None:
+        group = '24'
+        request.session['group'] = group
+
+    dictionary = {'days': get_timetable(group), 'current': get_current(), 'form': form, 'error': error}
+    return render(request, "timetable/index.html", context=dictionary)

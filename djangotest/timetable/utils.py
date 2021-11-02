@@ -26,12 +26,13 @@ def process_timetable(result):
     return days
 
 
-def get_timetable():
+def get_timetable(group):
     if settings.DEBUG:
         with open('data.json', 'r') as f:
-            return json.load(f)
+            json_data = json.load(f)
     else:
-        return requests.get('https://rasp.source-point.ru/timetable/rasp?gid=24', verify=False).json()
+        json_data = requests.get('https://rasp.source-point.ru/timetable/rasp?gid=' + group, verify=False).json()
+    return process_timetable(json_data)
 
 
 def get_current():
@@ -62,3 +63,11 @@ def get_current():
         lesson = 0
     current['lesson'] = str(lesson)
     return current
+
+
+def get_groups():
+    result = requests.get('https://rasp.source-point.ru/timetable/parameters', verify=False).json()
+    groups = []
+    for group in result['group']:
+        groups.append((group['id_group'], group['number_group']))
+    return groups
