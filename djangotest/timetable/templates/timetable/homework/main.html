@@ -1,0 +1,20 @@
+{% extends "timetable/layout.html" %}
+{% block title %}Домашние задания{% endblock %}
+{% block content %}
+
+<div class="panel">
+    <div class="category">
+        <img class="img-category" src="/static/homework.svg">
+        <h2>Список домашних заданий</h2>
+        <p>Показать список домашних заданий</p>
+        <p><a class="btn btn-secondary" href="/homework/list" role="button">Перейти</a></p>
+    </div>
+    <div class="category">
+        <img class="img-category" src="/static/homework.svg">
+        <h2>Добавить</h2>
+        <p>Добавить домашнее задание</p>
+        <p><a class="btn btn-secondary" href="/homework/add" role="button">Перейти</a></p>
+    </div>
+</div>
+
+{% endblock %}

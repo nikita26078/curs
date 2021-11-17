@@ -1,0 +1,15 @@
+{% extends "timetable/layout.html" %}
+{% block title %}Домашние задания{% endblock %}
+{% block content %}
+
+<div style="max-width: 70rem;min-width: 18rem;">
+    <h1>Добавить задание</h1>
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <span> {{ error }} </span>
+        <button class="btn btn-success" type="submit">Отправить</button>
+    </form>
+</div>
+
+{% endblock %}

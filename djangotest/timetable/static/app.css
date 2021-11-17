@@ -27,6 +27,20 @@ p.copyright {
     text-align: center;
 }
 
+.img-category {
+    border-radius: 50% !important;
+    width: 140px;
+    height: 140px;
+}
+
+.category {
+    margin: 0 auto;
+    min-width: 300px;
+    max-width: 360px;
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+}
+
 body {
     -webkit-background-size: cover;
     -moz-background-size: cover;

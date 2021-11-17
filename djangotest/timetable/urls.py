@@ -11,4 +11,8 @@ urlpatterns = [
     path('login', views.user_login, name='login'),
     path('profile', views.profile, name='profile'),
     path('view', views.view, name='view'),
+    path('homework', views.homework, name='homework'),
+    path('homework/list', HomeworkListView.as_view(), name='homework_list'),
+    path('homework/add', HomeworkCreateView.as_view(), name='homework_add'),
+    path('homework/delete/<int:id>', views.homework_delete, name='homework_delete'),
 ]

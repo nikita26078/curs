@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, PasswordInput, Form, ChoiceField
 
+from .models import Homework
+
 
 class UserRegistrationForm(ModelForm):
     password = CharField(label='Пароль', widget=PasswordInput)
@@ -25,3 +27,9 @@ class LoginForm(Form):
 
 class ParamsForm(Form):
     group = ChoiceField(label="Группа")
+
+
+class HomeworkForm(ModelForm):
+    class Meta:
+        model = Homework
+        fields = ['title', 'desc']

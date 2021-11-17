@@ -1,8 +1,11 @@
 # Create your views here.
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 
-from .forms import LoginForm, UserRegistrationForm, ParamsForm
+from .models import Homework
+from .forms import LoginForm, UserRegistrationForm, ParamsForm, HomeworkForm
 from .utils import get_timetable, get_current, get_groups
 
 
@@ -83,3 +86,27 @@ def view(request):
 
     dictionary = {'days': get_timetable(group), 'current': get_current(), 'form': form, 'error': error}
     return render(request, "timetable/index.html", context=dictionary)
+
+
+def homework(request):
+    return render(request, 'timetable/homework/main.html')
+
+
+def homework_delete(request, id):
+    obj = Homework.objects.get(id=id)
+    obj.delete()
+    mydictionary = {
+        "object_list": Homework.objects.all()
+    }
+    return redirect("/homework/list", context=mydictionary)
+
+
+class HomeworkListView(ListView):
+    model = Homework
+    template_name = 'timetable/homework/list.html'
+
+
+class HomeworkCreateView(CreateView):
+    template_name = 'timetable/homework/add.html'
+    form_class = HomeworkForm
+    success_url = reverse_lazy('homework')
