@@ -1,18 +1,26 @@
 {% extends "timetable/layout.html" %}
 {% block title %}Домашние задания{% endblock %}
 {% block content %}
-<div class="panel">
-{% for item in object_list %}
-    <div class="card h-100 mb-3 ms-3" style="max-width: 18rem;min-width: 20rem;">
-        <div class="card-body">
-            <h5>{{item.title}}</h5>
-            <p class="card-text line-clamp">{{item.desc}}</p>
-            <div class="mx-auto">
-                <a href="/homework/delete/{{item.id}}" class="btn btn-primary mb-2">Удалить</a>
-            </div>
-        </div>
+    <div style="max-width: 60rem;">
+        <table class="col-md-12">
+            <tbody>
+            <tr>
+                <td><b>Название</b></td>
+                <td><b>Описание</b></td>
+                <td><b>Предмет</b></td>
+                <td></td>
+            </tr>
+            {% for item in object_list %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.desc }}</td>
+                    <td>{{ item.subj }}</td>
+                    <td style="width: 1%; white-space: nowrap;"><a href="/homework/delete/{{ item.id }}"
+                                                                   class="btn btn-primary mb-2">Удалить</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-{% endfor %}
-</div>
 
 {% endblock %}

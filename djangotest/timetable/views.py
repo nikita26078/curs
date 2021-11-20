@@ -149,5 +149,5 @@ class HomeworkCreateView(CreateView):
     success_url = reverse_lazy('homework')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user.id
+        form.instance.user = self.request.user
         return super(HomeworkCreateView, self).form_valid(form)
