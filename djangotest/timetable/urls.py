@@ -15,4 +15,6 @@ urlpatterns = [
     path('homework/list', HomeworkListView.as_view(), name='homework_list'),
     path('homework/add', HomeworkCreateView.as_view(), name='homework_add'),
     path('homework/delete/<int:id>', views.homework_delete, name='homework_delete'),
+    path('replacements', views.replacements, name='replacements'),
+    path('replacements/delete/<int:id>', views.replacements_delete, name='replacements_delete'),
 ]

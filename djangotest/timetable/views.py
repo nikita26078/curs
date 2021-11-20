@@ -4,8 +4,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
-from .models import Homework
-from .forms import LoginForm, UserRegistrationForm, ParamsForm, HomeworkForm
+from .models import Homework, Replacement
+from .forms import LoginForm, UserRegistrationForm, ParamsForm, HomeworkForm, ReplacementForm
 from .utils import get_timetable, get_current, get_groups
 
 
@@ -71,9 +71,13 @@ def view(request):
     if request.method == 'POST':
         if form.is_valid():
             request.session['form_data'] = form.cleaned_data
-            group = form.data['group']
+
+            group = form.cleaned_data['group']
             request.session['group'] = group
-            dictionary = {'days': get_timetable(group), 'current': get_current(), 'form': form}
+            show_teacher = form.cleaned_data['show_teacher']
+            request.session['show_teacher'] = show_teacher
+            dictionary = {'days': get_timetable(group), 'show_teacher': show_teacher,
+                          'current': get_current(), 'form': form}
             return redirect("/", context=dictionary)
         else:
             print(form.errors)
@@ -84,12 +88,34 @@ def view(request):
         group = '24'
         request.session['group'] = group
 
-    dictionary = {'days': get_timetable(group), 'current': get_current(), 'form': form, 'error': error}
+    show_teacher = request.session.get('show_teacher', False)
+
+    dictionary = {'days': get_timetable(group), 'show_teacher': show_teacher,
+                  'current': get_current(), 'form': form, 'error': error}
     return render(request, "timetable/index.html", context=dictionary)
 
 
 def homework(request):
     return render(request, 'timetable/homework/main.html')
+
+
+def replacements(request):
+    replacement = Replacement.objects.filter(group=24).first()
+    if request.method == 'POST':
+        replacement_form = ReplacementForm(request.POST, request.FILES)
+        if replacement_form.is_valid():
+            replacement = replacement_form.save()
+            return render(request, 'timetable/replacements.html',
+                          {'replacement_form': replacement_form, 'replacement': replacement})
+    else:
+        group = request.session.get('group')
+        if group is None:
+            group = '24'
+            request.session['group'] = group
+
+        replacement_form = ReplacementForm(initial={'group': int(group)})
+    return render(request, 'timetable/replacements.html',
+                  {'replacement_form': replacement_form, 'replacement': replacement})
 
 
 def homework_delete(request, id):
@@ -101,12 +127,27 @@ def homework_delete(request, id):
     return redirect("/homework/list", context=mydictionary)
 
 
+def replacements_delete(request, id):
+    obj = Replacement.objects.get(group=id)
+    obj.delete()
+    return replacements(request)
+
+
 class HomeworkListView(ListView):
     model = Homework
     template_name = 'timetable/homework/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = Homework.objects.filter(user=self.request.user.id)
+        return context
 
 
 class HomeworkCreateView(CreateView):
     template_name = 'timetable/homework/add.html'
     form_class = HomeworkForm
     success_url = reverse_lazy('homework')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user.id
+        return super(HomeworkCreateView, self).form_valid(form)

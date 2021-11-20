@@ -14,9 +14,17 @@
                         <tr class="row_custom">
                             <td>{{ lesson_id|add:"1" }}</td>
                             {% if current.day == day_id and current.lesson == lesson_id %}
-                                <td class="active">{{ lesson.lesson }}</td>
+                                <td class="active">{{ lesson.lesson }}
+                                    {% if show_teacher %}
+                                        <p class="small">{{ lesson.teacher_one }}</p>
+                                    {% endif %}
+                                </td>
                             {% else %}
-                                <td>{{ lesson.lesson }}</td>
+                                <td>{{ lesson.lesson }}
+                                    {% if show_teacher %}
+                                        <p class="small">{{ lesson.teacher_one }}</p>
+                                    {% endif %}
+                                </td>
                             {% endif %}
                             <td class="text-center p-0">
                                 {% if lesson.cabinet_two == "" %}
@@ -38,7 +46,8 @@
     <div class="accordion mx-auto" id="accordionExample" style="width: 20rem;">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne"
                         aria-controls="collapseOne">
                     Настройки
                 </button>

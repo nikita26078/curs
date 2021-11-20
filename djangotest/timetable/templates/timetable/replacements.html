@@ -1,0 +1,29 @@
+{% extends "timetable/layout.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+    <h1>Замены</h1>
+
+    {% if replacement %}
+        <div class="card h-100 mb-3 ms-3" style="max-width: 600px;">
+            <div class="card-body">
+                <h5>{{ replacement.title }}</h5>
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ replacement.img.url }}"
+                     alt="Изображение не загрузилось">
+                <p class="card-text">{{ replacement.desc }}</p>
+                <div class="mx-auto">
+                    <a href="/replacements/delete/{{ replacement.group }}" class="btn btn-primary mb-2">Удалить</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Нет замен</p>
+    {% endif %}
+
+    <div class="my-4">
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ replacement_form.as_p }}
+            <button class="btn btn-success" type="submit">Отправить</button>
+        </form>
+    </div>
+{% endblock %}

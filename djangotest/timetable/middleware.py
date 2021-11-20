@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 
-EXCLUDE_URLS = ['/', '/register', '/login']
+EXCLUDE_URLS = ['/homework']
 
 
 class AuthRequiredMiddleware(object):
@@ -12,11 +12,8 @@ class AuthRequiredMiddleware(object):
         # the view (and later middleware) are called.
 
         response = self.get_response(request)
-        """if not request.user.is_authenticated and request.path_info not in EXCLUDE_URLS:
-            return HttpResponseRedirect('/')
-
-        if request.user.is_authenticated and request.path_info in EXCLUDE_URLS:
-            return HttpResponseRedirect('/home')"""
+        if not request.user.is_authenticated and request.path_info in EXCLUDE_URLS:
+            return HttpResponseRedirect('/login')
 
         # Code to be executed for each request/response after
         # the view is called.

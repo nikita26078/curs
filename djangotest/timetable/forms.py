@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, PasswordInput, Form, ChoiceField
+from django.forms import ModelForm, CharField, PasswordInput, Form, ChoiceField, BooleanField
+from django.forms.widgets import HiddenInput
 
-from .models import Homework
+from .models import Homework, Replacement
 
 
 class UserRegistrationForm(ModelForm):
@@ -26,10 +27,23 @@ class LoginForm(Form):
 
 
 class ParamsForm(Form):
+    show_teacher = BooleanField(label="Показывать преподавателей", required=False)
     group = ChoiceField(label="Группа")
 
 
 class HomeworkForm(ModelForm):
     class Meta:
         model = Homework
-        fields = ['title', 'desc']
+        fields = ['title', 'desc', 'subj', 'user']
+        widgets = {
+            'user': HiddenInput(),
+        }
+
+
+class ReplacementForm(ModelForm):
+    class Meta:
+        model = Replacement
+        fields = ['img', 'group']
+        widgets = {
+            'group': HiddenInput(),
+        }
