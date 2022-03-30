@@ -1,5 +1,5 @@
 # Create your views here.
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
@@ -47,6 +47,11 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'timetable/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("/")
 
 
 def profile(request):
