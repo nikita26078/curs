@@ -35,7 +35,6 @@ ALLOWED_HOSTS = ['timetable-rtk.herokuapp.com/', '127.0.0.1']
 INSTALLED_APPS = [
     'jazzmin',
     'timetable',
-    'django_addanother',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
