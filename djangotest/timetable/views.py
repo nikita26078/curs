@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
 from .models import Homework, Replacement
-from .forms import LoginForm, UserRegistrationForm, ParamsForm, HomeworkForm, ReplacementForm
-from .utils import get_timetable, get_current, get_groups
+from .forms import LoginForm, UserRegistrationForm, ParamsForm, HomeworkForm, ReplacementForm, TeacherForm
+from .utils import get_timetable, get_current, get_groups, get_timetable_by_teacher, get_teachers
 
 
 def about(request):
@@ -98,6 +98,37 @@ def view(request):
     dictionary = {'days': get_timetable(group), 'show_teacher': show_teacher,
                   'current': get_current(), 'form': form, 'error': error}
     return render(request, "timetable/index.html", context=dictionary)
+
+
+def teachers(request):
+    error = ''
+    form = TeacherForm(request.POST or None, initial=request.session.get('teacher_form_data'))
+    choices = request.session.get('teacher_choices')
+    if choices is None:
+        choices = get_teachers()
+        request.session['teacher_choices'] = choices
+    form.fields['teacher'].choices = choices
+
+    if request.method == 'POST':
+        if form.is_valid():
+            request.session['teacher_form_data'] = form.cleaned_data
+
+            teacher = form.cleaned_data['teacher']
+            request.session['teacher'] = teacher
+            dictionary = {'days': get_timetable_by_teacher(teacher),
+                          'current': get_current(), 'form': form}
+            return redirect("/teachers", context=dictionary)
+        else:
+            print(form.errors)
+            error = 'Ошибка валидации'
+
+    teacher = request.session.get('teacher')
+    if teacher is None:
+        teacher = '32'
+        request.session['teacher'] = teacher
+
+    dictionary = {'days': get_timetable_by_teacher(teacher), 'current': get_current(), 'form': form, 'error': error}
+    return render(request, "timetable/teachers.html", context=dictionary)
 
 
 def homework(request):

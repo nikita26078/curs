@@ -19,6 +19,16 @@
     background-color: #333333;
 }
 
+#id_teacher {
+    max-width: 100%;
+}
+
+@media (min-width: 500px) {
+    #id_teacher {
+        max-width: none;
+    }
+}
+
 p.copyright {
     width: 100%;
     color: #fff;

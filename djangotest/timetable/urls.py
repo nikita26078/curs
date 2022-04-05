@@ -12,6 +12,7 @@ urlpatterns = [
     path('logout', views.user_logout, name='logout'),
     path('profile', views.profile, name='profile'),
     path('view', views.view, name='view'),
+    path('teachers', views.teachers, name='teachers'),
     path('homework', views.homework, name='homework'),
     path('homework/list', HomeworkListView.as_view(), name='homework_list'),
     path('homework/add', HomeworkCreateView.as_view(), name='homework_add'),

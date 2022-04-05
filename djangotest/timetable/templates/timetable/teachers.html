@@ -1,0 +1,53 @@
+{% extends "timetable/layout.html" %}
+{% block title %}Преподаватели{% endblock %}
+{% block content %}
+    <div class="mx-auto mb-4" style="width: 18rem;">
+        <form method="post" action="teachers">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <span> {{ error }} </span>
+            <button class="btn btn-success" type="submit">Перейти</button>
+        </form>
+    </div>
+    <div class="panel">
+        {% for day_id, day in days.items %}
+            <div class="list-group mx-auto mb-4 mobile_header_rasp" style="width: 18rem;">
+                <table class="col-md-12">
+                    <tbody>
+                    <tr>
+                        <th colspan="3" class="text-center header_set">{{ day.name }}</th>
+                    </tr>
+                    {% for lesson_id, lesson in day.lessons.items %}
+                        <tr class="row_custom">
+                            <td>{{ lesson_id|add:"1" }}</td>
+                            {% if current.day == day_id and current.lesson == lesson_id %}
+                                <td class="active">{{ lesson.lesson }}
+                                    {% if show_teacher %}
+                                        <p class="small">{{ lesson.teacher_one }}</p>
+                                    {% endif %}
+                                </td>
+                            {% else %}
+                                <td>{{ lesson.lesson }}
+                                    {% if show_teacher %}
+                                        <p class="small">{{ lesson.teacher_one }}</p>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td class="text-center p-0">
+                                {% if lesson.cabinet_two == "" %}
+                                    <span>{{ lesson.cabinet_one }}</span>
+                                {% else %}
+                                    <div class="kab h-100">
+                                        <div class="h-50">{{ lesson.cabinet_one }}</div>
+                                        <div class="h-50">{{ lesson.cabinet_two }}</div>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

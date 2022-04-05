@@ -31,6 +31,10 @@ class ParamsForm(Form):
     group = ChoiceField(label="Группа")
 
 
+class TeacherForm(Form):
+    teacher = ChoiceField(label="Преподаватель")
+
+
 class HomeworkForm(ModelForm):
     class Meta:
         model = Homework
